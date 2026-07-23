@@ -7,7 +7,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 CONTAINER="midir"
-RUNTIME_DIR="$REPO_ROOT/runtime"
+# Persistent data (SQLite DB, settings, session logs) lives here and is
+# bind-mounted into the container at /app. Kept off the repo/OS disk on the
+# md0 RAID array; override with MIDIR_RUNTIME_DIR if needed.
+RUNTIME_DIR="${MIDIR_RUNTIME_DIR:-/mnt/md0/Midir/runtime}"
 VERSION_FILE="$REPO_ROOT/.midir-version"
 
 # Image tag the container runs. Pinned to the version recorded by `update` so a
